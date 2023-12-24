@@ -15,7 +15,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.conf.urls.static import static
 from django.urls import path
+from django.conf import settings
 from listings.views import Listing_list, Listing_retrieve, Listing_create, Listing_update, Listing_delete
 
 urlpatterns = [
@@ -27,3 +29,7 @@ urlpatterns = [
     path('add-listing', Listing_create)
     
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, documen_root = settings.MEDIA_ROOT)
