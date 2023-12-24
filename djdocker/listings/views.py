@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Listing
 from .forms import ListingForm
 
@@ -19,4 +19,35 @@ def Listing_retrieve(request, pk):
     return render(request, "listing.html", context)
 
 
-def Listing_create():
+def Listing_create(request):
+    form = ListingForm()
+    if request.method == "POST":
+        form = ListingForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("/")
+    
+    context = {
+        "form": form
+    }
+    return render(request, "listing_create.html", context)
+
+def Listing_update(request, pk):
+    listing = Listing.objects.get(id=pk)
+    form = ListingForm(instance=listing)
+    if request.method == "POST":
+        form = ListingForm(request.POST, instance=listing)
+        if form.is_valid():
+            form.save()
+            return redirect("/")
+    
+    context = {
+        "form": form
+    }
+    return render(request, "listing_update.html", context)
+
+def Listing_delete(request, pk):
+    listing = Listing.objects.get(id=pk)
+    listing.delete()
+    return redirect("/")
+    
